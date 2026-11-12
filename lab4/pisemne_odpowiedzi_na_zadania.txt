@@ -1,0 +1,47 @@
+Lab 4:
+1. Zmień max_features ze 100 na 300. Porównaj liczbę cech i przykładowe klastry. Czy grupy są równie czytelne?
+np. jeżeli w zbiorze danych unikalnych słów jest więcej niż zadany limit, to zwiększenie nie zmieni liczby kolumn w macierzy. Również jeżeli cech byłoby więcej niż limit, to po jego zwiększeniu liczba kolumn w macierzy zwiększyłaby się.
+W tym przypadku tak, czytelność słów kluczowych w klastrach pozostaje wysoka, ale jak damy za dużą liczbę w przypadku zbyt malej liczby dokumentów, to może skutkować szumu danych.
+
+2. Policz adjusted_rand_score między source a labels_. Etykiety służą tu wyłącznie do oceny po treningu. Uzasadnij różnicę.
+K-Means grupuje dokumenty na podstawie podobieństwa leksykalnego i statystycznego (wspólnych słów w TF-IDF). K-Means to algorytm uczenia nienadzorowanego, uczy się bez etykiet, tylko grupuje tylko ze względu na wektory (macierz TF-IDF). Już po ugrupowaniu sprawdzamy czy dobrze pogrupował używając etykiet. 
+
+3.Narysuj wykres k → inertia z /api/elbow lub bezpośrednio w Pythonie. Zaznacz swój wybór k i zapisz, dlaczego sam wykres nie rozstrzyga sprawy.
+Wykres nie roztrzega sprawy ponieważ w naszym przypadku nie widać na wykresie tak zwanego zgięcia łokcia, wykres jest całkiem równomierny. Ciężko powiedzieć jaka jest najleprza ilość grup
+
+
+Własna próba:
+1. Wzrost cen paliw: Ceny paliw na stacjach poszły w górę. Kierowcy szukają oszczędności, a /firmy/ transportowe podnoszą stawki za usługi. Sytuacja wpływa na /koszty/ logistyki w całym kraju.	
+2. Cyfryzacja małych /firm/: Lokalne przedsiębiorstwa inwestują w systemy e-commerce i automatyzację. Klienci coraz częściej wybierają zakupy online oraz płatności bezgotówkowe. Transformacja zwiększa konkurencyjność na /rynku/.	
+
+Przewiduję, że te dwa artykuły trafią do tego samego klastra, ponieważ oba opisują tematykę finansową/biznesową i zawierają słowa kluczowe takie jak inflacja, budżet czy bank.
+
+Przed dodaniem:
+max_features=100, min_df=2, shape=(40, 100), ARI=0.834, inertia=27.045
+Elbow (ta sama macierz): [{'k': 2, 'inertia': 34.352}, {'k': 3, 'inertia': 31.841}, {'k': 4, 'inertia': 29.585}, {'k': 5, 'inertia': 27.031}, {'k': 6, 'inertia': 24.884}, {'k': 7, 'inertia': 23.217}, {'k': 8, 'inertia': 21.117}]
+max_features=300, min_df=2, shape=(40, 119), ARI=1.000, inertia=27.296
+max_features=300, min_df=1, shape=(40, 300), ARI=0.747, inertia=31.369
+
+0 6 wynik, zawodników, trening, zawodami
+1 8 urządzenia, technologii, technologia, użytkowników
+*2 9 koszty, rynek, firmy, rynku
+3 8 artystów, publicznością, artyści, podczas
+4 9 przyrody, klimat, środowiska, zmian
+
+Po dodaniu:
+max_features=100, min_df=2, shape=(42, 100), ARI=0.935, inertia=28.335
+Elbow (ta sama macierz): [{'k': 2, 'inertia': 36.408}, {'k': 3, 'inertia': 33.498}, {'k': 4, 'inertia': 31.33}, {'k': 5, 'inertia': 28.676}, {'k': 6, 'inertia': 26.552}, {'k': 7, 'inertia': 24.643}, {'k': 8, 'inertia': 22.568}]
+max_features=300, min_df=2, shape=(42, 123), ARI=0.875, inertia=29.357
+max_features=300, min_df=1, shape=(42, 300), ARI=0.628, inertia=33.508
+
+42 artykułów, 123 cech
+0 10 koszty, firmy, rynku, rynek
+1 9 urządzenia, technologii, technologia, użytkowników
+2 7 artystów, podczas, publiczność, festiwalu
+3 8 trening, wynik, zawodników, zawodnicy
+4 8 przyrody, klimat, środowiska, zmian
+Elbow: [{'k': 2, 'inertia': 36.51}, {'k': 3, 'inertia': 33.97}, {'k': 4, 'inertia': 32.077}, {'k': 5, 'inertia': 29.407}, {'k': 6, 'inertia': 27.969}, {'k': 7, 'inertia': 25.603}, {'k': 8, 'inertia': 23.571}]
+
+
+Wybraliśmy k=5 ponieważ wiemy że mamy 5 typów w pliku csv. Najmniej przekonujący klaster 3 (sport) ponieważ słowa kluczowe wyznaczone przez centroid mieszały pojęcia z różnych dziedzin, co oznaczało, że artykuły w tym klastrze były tematycznie zróżnicowane i algorytm miał problem z ich czystym rozdzieleniem.
+

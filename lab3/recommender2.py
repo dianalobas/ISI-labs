@@ -2,12 +2,11 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
 # 1. Wczytanie danych i zbudowanie macierzy (12 osób x 24 filmy)
-# Jeśli masz Excela, zamień na: pd.read_excel("ratings.xlsx")
 df = pd.read_csv("ratings.csv")
 matrix = df.pivot_table(index="user", columns="title", values="rating")
 
 # 2. Centrowanie ocen (odejmujemy średnią każdej osoby, braki NaN zamieniamy na 0)
-means = matrix.mean(axis=1)
+means = matrix.mean(axis=1) # suma z linijki maciezy (horysontalne średnie)
 centered = matrix.sub(means, axis=0).fillna(0)
 
 # Liczymy podobieństwo kosinusowe między osobami
